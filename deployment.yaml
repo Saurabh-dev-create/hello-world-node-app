@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cicd-deploy
+spec:
+  selector:
+    matchLabels:
+      app: cicd-pod
+  template:
+    metadata:
+      labels:
+        app: cicd-pod
+    spec:
+      containers:
+      - name: cicd
+        image: <DOCKERHUB_USERNAME>/cicd:latest
+        port:
+        - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata: 
+  name: cicd-deploy-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: cicd-pod
+  ports:
+  - protcol: TCP
+    port: 80
+    targetPort: 4000
+    
