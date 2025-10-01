@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: cicd-deploy
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: cicd-pod
@@ -11,17 +12,19 @@ spec:
       labels:
         app: cicd-pod
     spec:
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
       containers:
       - name: cicd
         image: dockerwithsaurabh/cicd:latest
         ports:
-        - containerPort: 80
-
+        - containerPort: 4000  # match your Node.js app
 ---
-
 apiVersion: v1
 kind: Service
-metadata:
+metadata: 
   name: cicd-deploy-service
 spec:
   type: LoadBalancer
@@ -31,5 +34,6 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 4000
+
 
     
