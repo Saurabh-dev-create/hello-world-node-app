@@ -13,22 +13,23 @@ spec:
     spec:
       containers:
       - name: cicd
-        image: <DOCKERHUB_USERNAME>/cicd:latest
-        port:
+        image: dockerwithsaurabh/cicd:latest
+        ports:
         - containerPort: 80
 
 ---
 
 apiVersion: v1
 kind: Service
-metadata: 
+metadata:
   name: cicd-deploy-service
 spec:
   type: LoadBalancer
   selector:
     app: cicd-pod
   ports:
-  - protcol: TCP
+  - protocol: TCP
     port: 80
     targetPort: 4000
+
     
